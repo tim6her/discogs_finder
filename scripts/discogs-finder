@@ -5,14 +5,27 @@ import re
 
 from discogs_finder import *
 
+
 @click.command(context_settings=dict(
     ignore_unknown_options=True,
 ))
 @click.argument('querry', nargs=-1, type=click.UNPROCESSED)
 def finder(querry):
     """ FIND Every Release:
-
-Find the releases in your collection with an easy key value search.
+    
+    Find the releases in your collection with an easy
+    key value search.  The script 'discogs-finder' 
+    accepts one option that is specified in form of a
+    'key=value' format.  If the value contains 
+    whitespace, the argument must be contained in 
+    "quotation marks".
+    
+    \b
+    Examples:
+        $ discogs-tagger name="Keith Jarrett"
+        $ discogs-tagger name="ABC Impulse!"
+        $ discogs-tagger title=Shades
+        $ discogs-tagger id=3318191
     """
     user = 'tim6her'
     
