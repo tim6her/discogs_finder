@@ -1,6 +1,8 @@
 # discogs_finder
 **FIND** **E**very **R**elease in your collection
 
+![build](https://travis-ci.org/tim6her/discogs_finder.svg?branch=master)
+
 This is a small commandline tool that fetches your discogs collection and performs a deep key value search.
 
     $ discogs-finder name=Chick
