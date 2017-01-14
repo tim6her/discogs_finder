@@ -1,0 +1,44 @@
+{
+    "instance_id": 188396596,
+    "date_added": "2016-09-16T02:44:20-07:00",
+    "basic_information": {
+        "labels": [
+            {
+                "name": "ABC Impulse!",
+                "entity_type": "1",
+                "catno": "28 307 XOT",
+                "resource_url": "https://api.discogs.com/labels/202935",
+                "id": 202935,
+                "entity_type_name": "Label"
+            }
+        ],
+        "formats": [
+            {
+                "descriptions": [
+                    "LP",
+                    "Album"
+                ],
+                "name": "Vinyl",
+                "qty": "1"
+            }
+        ],
+        "thumb": "",
+        "title": "Shades",
+        "artists": [
+            {
+                "join": ",",
+                "name": "Keith Jarrett",
+                "anv": "",
+                "tracks": "",
+                "role": "",
+                "resource_url": "https://api.discogs.com/artists/145273",
+                "id": 145273
+            }
+        ],
+        "resource_url": "https://api.discogs.com/releases/3318191",
+        "year": 1976,
+        "id": 3318191
+    },
+    "id": 3318191,
+    "rating": 4
+}

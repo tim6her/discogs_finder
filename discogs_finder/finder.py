@@ -12,6 +12,20 @@ def load_data(username):
     return json.load(s_data)['releases']
 
 def release_string(d_release):
+    """ Produces a string describing a release
+    
+    Args:
+        d_release (dict): dictonary containing the release data
+    
+    Returns:
+        (string) representing the release
+    
+    Example:
+        >>> with open('tests/test.json', 'r') as f:
+        ...     r = json.load(f)
+        >>> discogs_finder.release_string(r)
+        u'Keith Jarrett: Shades (3318191)'
+    """
     release_id = d_release['id']
     basics = d_release.get('basic_information', None)
     if not basics:
@@ -58,3 +72,7 @@ def found_in_release(data, add=None, **querry):
         return hits[0]
     else:
         return False, add, None
+        
+def test():
+    import doctest
+    doctest.testmod()
