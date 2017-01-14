@@ -16,4 +16,6 @@ setup(name='discogs_finder',
                 'click',
             ],
       scripts=['scripts/discogs-finder'],
+      test_suite='nose.collector',
+      tests_require=['nose'],
       zip_safe=False)
