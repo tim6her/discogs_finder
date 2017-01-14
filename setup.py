@@ -1,7 +1,7 @@
 from setuptools import setup
 
 def readme():
-    with open('README.rst') as f:
+    with open('README.md') as f:
         return f.read()
 
 setup(name='discogs_finder',
@@ -13,8 +13,7 @@ setup(name='discogs_finder',
       license='MIT',
       packages=['discogs_finder'],
       install_requires=[
-                'click', 
-                'urllib2', 
-                'json'
+                'click',
             ],
+      scripts=['scripts/discogs-finder'],
       zip_safe=False)

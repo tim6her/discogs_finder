@@ -3,7 +3,7 @@
 
 This is a small commandline tool that fetches your discogs collection and performs a deep key value search.
 
-    $ python finder.py name=Chick
+    $ discogs-finder name=Chick
     Searching for {'name': 'Chick'}
     1)	Herbie Hancock & Chick Corea: An Evening With Herbie Hancock & Chick Corea In Concert 1978 (530041)
     	basic_information.artists.1.name = Chick Corea

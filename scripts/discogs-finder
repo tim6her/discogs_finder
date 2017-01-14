@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+import click
+import re
+
+from discogs_finder import *
+
+@click.command(context_settings=dict(
+    ignore_unknown_options=True,
+))
+@click.argument('querry', nargs=-1, type=click.UNPROCESSED)
+def finder(querry):
+    """ FIND Every Release:
+
+Find the releases in your collection with an easy key value search.
+    """
+    user = 'tim6her'
+    
+
+    p_arg = re.compile(r'(\w+)=([\w\s]+)')
+    match = p_arg.match(querry[0])
+    if match:
+        q = {match.group(1): match.group(2)}
+    else:
+        raise KeyError('Could not match your querry to value=key')
+    
+    print 'Searching for ' + str(q)
+    data = load_data(user)
+    
+    result = []
+    for r in data:
+        f, a, v = found_in_release(r, None, **q)
+        if f:
+            s = '%d)\t%s\n\t%s = %s' % (len(result) + 1,
+                                    release_string(r), 
+                                    '.'.join(a), v)
+            result.append(s)
+    print '\n'.join(result)
+    
+if __name__ == '__main__':
+    finder()

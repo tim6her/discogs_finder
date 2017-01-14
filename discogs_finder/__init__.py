@@ -1,1 +1,1 @@
-import finder
+from finder import *
