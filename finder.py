@@ -36,29 +36,40 @@ def release_string(d_release):
                                             title=title,
                                             release_id=release_id)
 
-def found_in_release(data, **querry):
+def found_in_release(data, add=None, **querry):
+    add = [] if not add else add
     if type(data) == list:
-        sub = (found_in_release(d, **querry) for d in data)
+        sub = (found_in_release(d, add + [unicode(i)], **querry) 
+                        for i, d in enumerate(data))
         
     elif type(data) == dict:
         field = querry.keys()[0]
         value = querry[field]
-        if unicode(value) in unicode(data.get(field, '')):
-            return True
+        if unicode(value).lower() in unicode(data.get(field, '')).lower():
+            return True, add + [unicode(field)], data[field]
         
-        sub = (found_in_release(d, **querry) for d in data.values())
+        sub = (found_in_release(d, add + [k], **querry)
+                        for k, d in data.iteritems())
         
     else:
-        return False
+        return False, add, None
     
-    #print list(sub)
-    return any(sub)
+    hits = [(f, a, v) for f, a, v in sub if f]
+
+    if len(hits):
+        return hits[0]
+    else:
+        return False, add, None
         
 @click.command(context_settings=dict(
     ignore_unknown_options=True,
 ))
 @click.argument('querry', nargs=-1, type=click.UNPROCESSED)
 def finder(querry):
+    """ FIND Every Release:
+
+Find the releases in your collection with an easy key value search.
+    """
     user = 'tim6her'
     
 
@@ -71,8 +82,15 @@ def finder(querry):
     
     print 'Searching for ' + str(q)
     data = load_data(user)
-    result = (release_string(r) for r in data 
-                        if found_in_release(r, **q))
+    
+    result = []
+    for r in data:
+        f, a, v = found_in_release(r, None, **q)
+        if f:
+            s = '%d)\t%s\n\t%s = %s' % (len(result) + 1,
+                                    release_string(r), 
+                                    '.'.join(a), v)
+            result.append(s)
     print '\n'.join(result)
     
 if __name__ == '__main__':
