@@ -2,6 +2,8 @@
 
 import click
 import re
+import json
+from string import Template
 
 from discogs_finder import *
 
@@ -11,8 +13,13 @@ from discogs_finder import *
 ))
 @click.option('--u', 'user', prompt='Your discogs user name',
               help='Your discogs user name')
+@click.option('--v', 'verbose', flag_value=True,
+              default=False,
+              help='Verbose output dumping the whole json-file')
+@click.option('--p', 'verbose', flag_value=False, 
+              help='Pretty output')
 @click.argument('querry', nargs=-1, type=click.UNPROCESSED)
-def finder(user, querry):
+def finder(user, querry, verbose=False):
     """ FIND Every Release:
     
     Find the releases in your collection with an easy
@@ -26,7 +33,7 @@ def finder(user, querry):
     Examples:
         $ discogs-tagger --u titm6her name="Keith Jarrett"
         $ discogs-tagger --u titm6her name="ABC Impulse!"
-        $ discogs-tagger --u titm6her title=Shades
+        $ discogs-tagger --u --v titm6her title=Shades
         $ discogs-tagger --u titm6her id=3318191
     """
 
@@ -36,9 +43,9 @@ def finder(user, querry):
         value = match.group(2)
         q = {match.group(1): match.group(2)}
     else:
-        raise KeyError('Could not match your querry to value=key')
+        raise click.BadParameter('Could not match your querry to value=key')
     
-    print 'Searching for ' + str(q)
+    click.echo('Searching for ' + str(q))
     data = load_data(user)
     
     p_repl = re.compile(value, flags=re.IGNORECASE)
@@ -46,11 +53,18 @@ def finder(user, querry):
     for r in data:
         f, a, v = found_in_release(r, None, **q)
         if f:
-            v = p_repl.sub(r'%s', unicode(v))
-            s = '%d)\t%s\n\t%s = %s' % (len(result) + 1,
-                                    release_string(r), 
-                                    '.'.join(a), v)
-            s = s % click.style(value, fg='green', bold=True)
+            if verbose:
+                s = json.dumps(r, indent=2)
+                s = p_repl.sub(r'${value}', s)
+                temp = Template(s)
+                style = click.style(value, fg='green', bold=True)
+                s = temp.safe_substitute(value=style)
+            else:
+                v = p_repl.sub(r'%s', unicode(v), count=1)
+                rs = release_string(r)
+                s = '%d)\t%s\n\t%s = %s' % (len(result) + 1,
+                                        rs, '.'.join(a), v)
+                s = s % click.style(value, fg='green', bold=True)
             result.append(s)
     click.echo('\n'.join(result))
     

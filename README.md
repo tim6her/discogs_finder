@@ -14,4 +14,19 @@ This is a small commandline tool that fetches your discogs collection and perfor
     3)	Wolfgang Amadeus Mozart, Chick Corea, Friedrich Gulda, Concertgebouworkest, Nikolaus Harnoncourt: Double Concerto / Compositions (4764105)
     	basic_information.artists.1.name = Chick Corea
 
-For help on usage run `python finder.py --help`.
+It can also return the whole json entry for the matched releases using the `--v` option.
+
+    $ discogs-finder --u tim6her --v name=Pob
+    Searching for {'name': 'Pob'}
+    {
+      "instance_id": 207732124, 
+      "date_added": "2017-01-14T05:32:34-08:00", 
+      "basic_information": {
+        "formats": [
+          {
+            "qty": "1", 
+            "descriptions": [
+              "LP", 
+              "Album", 
+
+For help on usage run `discogs-finder --help`.

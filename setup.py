@@ -9,7 +9,7 @@ def requirements():
         return f.read()
 
 setup(name='discogs_finder',
-      version='0.1',
+      version='1.0',
       description='FIND Every Release in your collection',
       long_description=readme(),
       url='https://github.com/tim6her/discogs_finder',
