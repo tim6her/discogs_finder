@@ -9,7 +9,8 @@ class TestScript(TestCase):
             'id=3318191']
         for q in querries:
             try:
-                exit_code = subprocess.call(['discogs-finder', q])
+                exit_code = subprocess.call(['discogs-finder',
+                                             '--u', 'tim6her', q])
                 assert exit_code == 0
             except OSError:
                 pass

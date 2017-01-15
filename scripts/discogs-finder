@@ -9,8 +9,10 @@ from discogs_finder import *
 @click.command(context_settings=dict(
     ignore_unknown_options=True,
 ))
+@click.option('--u', 'user', prompt='Your discogs user name',
+              help='Your discogs user name')
 @click.argument('querry', nargs=-1, type=click.UNPROCESSED)
-def finder(querry):
+def finder(user, querry):
     """ FIND Every Release:
     
     Find the releases in your collection with an easy
@@ -22,13 +24,11 @@ def finder(querry):
     
     \b
     Examples:
-        $ discogs-tagger name="Keith Jarrett"
-        $ discogs-tagger name="ABC Impulse!"
-        $ discogs-tagger title=Shades
-        $ discogs-tagger id=3318191
+        $ discogs-tagger --u titm6her name="Keith Jarrett"
+        $ discogs-tagger --u titm6her name="ABC Impulse!"
+        $ discogs-tagger --u titm6her title=Shades
+        $ discogs-tagger --u titm6her id=3318191
     """
-    user = 'tim6her'
-    
 
     p_arg = re.compile(r'(\w+)=([\w\s]+)')
     match = p_arg.match(querry[0])
