@@ -33,6 +33,7 @@ def finder(user, querry):
     p_arg = re.compile(r'(\w+)=([\w\s]+)')
     match = p_arg.match(querry[0])
     if match:
+        value = match.group(2)
         q = {match.group(1): match.group(2)}
     else:
         raise KeyError('Could not match your querry to value=key')
@@ -40,15 +41,18 @@ def finder(user, querry):
     print 'Searching for ' + str(q)
     data = load_data(user)
     
+    p_repl = re.compile(value, flags=re.IGNORECASE)
     result = []
     for r in data:
         f, a, v = found_in_release(r, None, **q)
         if f:
+            v = p_repl.sub(r'%s', unicode(v))
             s = '%d)\t%s\n\t%s = %s' % (len(result) + 1,
                                     release_string(r), 
                                     '.'.join(a), v)
+            s = s % click.style(value, fg='green', bold=True)
             result.append(s)
-    print '\n'.join(result)
+    click.echo('\n'.join(result))
     
 if __name__ == '__main__':
     finder()
