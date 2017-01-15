@@ -5,6 +5,19 @@ import urllib2
 
 
 def load_data(username):
+    """ Gets user collection (in all folders) for the 
+    specified user from the Discogs API.
+    
+    Args:
+        username (string): user name
+    
+    Returns
+        (dict): user collection
+    
+    Example:
+    >>> load_data('tim6her') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+        [{u'instance_id': 188396596, u'date_added': ...
+    """
     url = 'https://api.discogs.com/users/%s/collection/folders/0/releases'
     url = url % username
     s_data = urllib2.urlopen(url)
@@ -18,12 +31,12 @@ def release_string(d_release):
         d_release (dict): dictonary containing the release data
     
     Returns:
-        (string) representing the release
+        (string): representing the release
     
     Example:
-        >>> with open('tests/test.json', 'r') as f:
-        ...     r = json.load(f)
-        >>> discogs_finder.release_string(r)
+        >>> with open('discogs_finder/tests/test.json', 'r') as f:
+        ...    r = json.load(f)
+        >>> release_string(r) # doctest: +NORMALIZE_WHITESPACE
         u'Keith Jarrett: Shades (3318191)'
     """
     release_id = d_release['id']
@@ -49,6 +62,38 @@ def release_string(d_release):
                                             release_id=release_id)
 
 def found_in_release(data, add=None, **querry):
+    """ Searches recursively in all leafes of the tree
+     contained in `data` for the key value pair in `querry`
+    
+    Note:
+        The value must only be *contained* in a leaf not
+        equal the leafs value, i.e., "Kei" matches "Keith".
+    
+    Args:
+        data (dict):    the data tree
+        add (list):     address pre-fix, default `None`
+        querry (dict):  the key value pair to look for
+    
+    Returns:
+        (bool): `True` if pair was found else found
+        (list): If the pair was found, its address is 
+                returned, i.e., the sequence of nodes
+                leading to the pair.  List indices are
+                returned as `unicode(i)`.
+                Note: If the pair was not found there
+                is still a list returned but it
+                contains an *arbitrary* address.
+        (string): the matched value
+    
+    Example:
+        >>> with open('discogs_finder/tests/test.json', 'r') as f:
+        ...    r = json.load(f)
+        >>> found_in_release(r, name="Keith") 
+        ... # doctest: +NORMALIZE_WHITESPACE
+        (True, [u'basic_information', u'artists', u'0', u'name'], 
+        u'Keith Jarrett')
+
+    """
     add = [] if not add else add
     if type(data) == list:
         sub = (found_in_release(d, add + [unicode(i)], **querry) 
@@ -73,6 +118,8 @@ def found_in_release(data, add=None, **querry):
     else:
         return False, add, None
         
-def test():
+if __name__ == "__main__":
     import doctest
+    doctest.NORMALIZE_WHITESPACE
+    doctest.ELLIPSIS
     doctest.testmod()
