@@ -5,8 +5,9 @@ discogs\_finder
 
 .. image:: https://travis-ci.org/tim6her/discogs_finder.svg?branch=master
    :alt: build
-.. image:: https://coveralls.io/repos/github/tim6her/discogs_finder/badge.svg
-   :target: https://coveralls.io/github/tim6her/discogs_finder
+.. image:: https://coveralls.io/repos/github/tim6her/discogs_finder/badge.svg?branch=master
+   :target: https://coveralls.io/github/tim6her/discogs_finder?branch=master
+
 
 
 This is a small commandline tool that fetches your discogs collection
