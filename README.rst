@@ -3,8 +3,11 @@ discogs\_finder
 
 **FIND** **E**\ very **R**\ elease in your collection
 
-.. figure:: https://travis-ci.org/tim6her/discogs_finder.svg?branch=master
+.. image:: https://travis-ci.org/tim6her/discogs_finder.svg?branch=master
    :alt: build
+.. image:: https://coveralls.io/repos/github/tim6her/discogs_finder/badge.svg
+   :target: https://coveralls.io/github/tim6her/discogs_finder
+
 
 This is a small commandline tool that fetches your discogs collection
 and performs a deep key value search.
