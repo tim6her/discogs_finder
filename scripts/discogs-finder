@@ -33,7 +33,7 @@ def finder(user, querry, verbose=False):
     Examples:
         $ discogs-tagger --u titm6her name="Keith Jarrett"
         $ discogs-tagger --u titm6her name="ABC Impulse!"
-        $ discogs-tagger --u --v titm6her title=Shades
+        $ discogs-tagger --u --v titm6her title="An Evening"
         $ discogs-tagger --u titm6her id=3318191
     """
 

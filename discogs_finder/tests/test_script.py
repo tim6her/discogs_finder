@@ -5,7 +5,7 @@ class TestScript(TestCase):
     def test_wo_error(self):
         querries = ['name=Keith Jarrett',
             'name=ABC Impulse!',
-            'title=Shades',
+            'title=An Evening With Herbie Hancock',
             'id=3318191']
         for q in querries:
             try:

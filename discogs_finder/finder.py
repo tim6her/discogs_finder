@@ -38,6 +38,15 @@ def release_string(d_release):
         ...    r = json.load(f)
         >>> release_string(r) # doctest: +NORMALIZE_WHITESPACE
         u'Keith Jarrett: Shades (3318191)'
+    
+    Errors:
+        If the data does not contain the field "basic_information", 
+        an `KeyError` will be raised.
+    
+        >>> release_string({'id': 1}) 
+        Traceback (most recent call last): 
+            ...
+        KeyError: "Your release 1 doesn't contain the field 'basic_information'"
     """
     release_id = d_release['id']
     basics = d_release.get('basic_information', None)
@@ -117,9 +126,3 @@ def found_in_release(data, add=None, **querry):
         return hits[0]
     else:
         return False, add, None
-        
-if __name__ == "__main__":
-    import doctest
-    doctest.NORMALIZE_WHITESPACE
-    doctest.ELLIPSIS
-    doctest.testmod()
