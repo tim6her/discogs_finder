@@ -7,10 +7,19 @@ from string import Template
 
 from discogs_finder import *
 
+def _help(ctx, param, value):
+    with open('doc/discogs-finder.rst', 'r') as doc:
+        h = doc.read()
+    if not value or ctx.resilient_parsing:
+            return
+    click.echo(h)
+    ctx.exit()
 
 @click.command(context_settings=dict(
     ignore_unknown_options=True,
-))
+    ))
+@click.option('--help', is_flag=True, callback=_help,
+              expose_value=False, is_eager=True)
 @click.option('--u', 'user', prompt='Your discogs user name',
               help='Your discogs user name')
 @click.option('--v', 'verbose', flag_value=True,
@@ -20,23 +29,6 @@ from discogs_finder import *
               help='Pretty output')
 @click.argument('querry', nargs=-1, type=click.UNPROCESSED)
 def finder(user, querry, verbose=False):
-    """ FIND Every Release:
-    
-    Find the releases in your collection with an easy
-    key value search.  The script 'discogs-finder' 
-    accepts one option that is specified in form of a
-    'key=value' format.  If the value contains 
-    whitespace, the argument must be contained in 
-    "quotation marks".
-    
-    \b
-    Examples:
-        $ discogs-tagger --u titm6her name="Keith Jarrett"
-        $ discogs-tagger --u titm6her name="ABC Impulse!"
-        $ discogs-tagger --u --v titm6her title="An Evening"
-        $ discogs-tagger --u titm6her id=3318191
-    """
-
     p_arg = re.compile(r'(\w+)=([\w\s]+)')
     match = p_arg.match(querry[0])
     if match:
@@ -67,6 +59,6 @@ def finder(user, querry, verbose=False):
                 s = s % click.style(value, fg='green', bold=True)
             result.append(s)
     click.echo('\n'.join(result))
-    
+
 if __name__ == '__main__':
     finder()

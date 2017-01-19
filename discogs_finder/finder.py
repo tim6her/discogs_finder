@@ -39,10 +39,10 @@ def release_string(d_release):
         >>> release_string(r) # doctest: +NORMALIZE_WHITESPACE
         u'Keith Jarrett: Shades (3318191)'
     
-    Errors:
+    Raises:
         If the data does not contain the field "basic_information", 
         an `KeyError` will be raised.
-    
+        
         >>> release_string({'id': 1}) 
         Traceback (most recent call last): 
             ...
@@ -74,25 +74,26 @@ def found_in_release(data, add=None, **querry):
     """ Searches recursively in all leafes of the tree
      contained in `data` for the key value pair in `querry`
     
-    Note:
-        The value must only be *contained* in a leaf not
-        equal the leafs value, i.e., "Kei" matches "Keith".
-    
     Args:
         data (dict):    the data tree
         add (list):     address pre-fix, default `None`
         querry (dict):  the key value pair to look for
     
     Returns:
-        (bool): `True` if pair was found else found
-        (list): If the pair was found, its address is 
+        (bool, list, string): 
+            *   `True` if pair was found else `False`
+            *   If the pair was found, its address is 
                 returned, i.e., the sequence of nodes
                 leading to the pair.  List indices are
                 returned as `unicode(i)`.
                 Note: If the pair was not found there
                 is still a list returned but it
                 contains an *arbitrary* address.
-        (string): the matched value
+            *   the matched value
+    
+    Note:
+        The value must only be *contained* in a leaf not
+        equal the leafs value, i.e., "Kei" matches "Keith".
     
     Example:
         >>> with open('discogs_finder/tests/test.json', 'r') as f:
@@ -101,7 +102,7 @@ def found_in_release(data, add=None, **querry):
         ... # doctest: +NORMALIZE_WHITESPACE
         (True, [u'basic_information', u'artists', u'0', u'name'], 
         u'Keith Jarrett')
-
+    
     """
     add = [] if not add else add
     if type(data) == list:

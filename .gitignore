@@ -15,3 +15,6 @@
 # Coveralls
 .coverage
 .coveralls.yml
+
+# Doc
+/doc/_build/
