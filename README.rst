@@ -7,6 +7,9 @@ discogs\_finder
    :alt: build
 .. image:: https://coveralls.io/repos/github/tim6her/discogs_finder/badge.svg?branch=master
    :target: https://coveralls.io/github/tim6her/discogs_finder?branch=master
+.. image:: https://readthedocs.org/projects/discogs-finder/badge/?version=latest
+   :target: http://discogs-finder.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
 
 
 
@@ -42,4 +45,4 @@ the ``--v`` option.
               "LP", 
               "Album", ...
 
-For help on usage run ``discogs-finder --help``.
+For help on usage run ``discogs-finder --help`` or consult the `Docs. <http://discogs-finder.readthedocs.io/en/latest/>`_
