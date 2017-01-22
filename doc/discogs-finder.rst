@@ -15,10 +15,10 @@ Examples:
 
 ::
 
-    $ discogs-tagger --u titm6her name="Keith Jarrett"
-    $ discogs-tagger --u titm6her name="ABC Impulse!"
-    $ discogs-tagger --u --v titm6her title="An Evening"
-    $ discogs-tagger --u titm6her id=3318191
+    $ discogs-finder --u titm6her name="Keith Jarrett"
+    $ discogs-finder --u titm6her name="ABC Impulse!"
+    $ discogs-finder --u --v titm6her title="An Evening"
+    $ discogs-finder --u titm6her id=3318191
 
 Options:
 --------
