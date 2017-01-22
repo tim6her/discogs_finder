@@ -14,6 +14,7 @@ Contents:
    discogs-finder
    finder
 
+.. include:: ../README.rst
 
 Indices and tables
 ==================
