@@ -5,7 +5,6 @@ class TestScript(TestCase):
     def test_wo_error(self):
         querries = ['name=Keith Jarrett',
             'name=ABC Impulse!',
-            'title=An Evening With Herbie Hancock',
             'id=3318191']
         for q in querries:
             try:
@@ -14,3 +13,11 @@ class TestScript(TestCase):
                 assert exit_code == 0
             except OSError:
                 pass
+        
+        try:
+            exit_code = subprocess.call(['discogs-finder',
+                                         '--u', 'tim6her',
+                                         '--v', 'title=An Evening'])
+            assert exit_code == 0
+        except OSError:
+            pass

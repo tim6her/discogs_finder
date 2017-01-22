@@ -5,17 +5,19 @@ import urllib2
 
 
 def load_data(username):
-    """ Gets user collection (in all folders) for the 
+    """ Gets user collection (in all folders)
+    
+    The collection is retrieved for the 
     specified user from the Discogs API.
     
     Args:
         username (string): user name
     
-    Returns
+    Returns:
         (dict): user collection
     
     Example:
-    >>> load_data('tim6her') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+        >>> load_data('tim6her') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
         [{u'instance_id': 188396596, u'date_added': ...
     """
     url = 'https://api.discogs.com/users/%s/collection/folders/0/releases'
@@ -33,20 +35,21 @@ def release_string(d_release):
     Returns:
         (string): representing the release
     
+    Raises:
+        (KeyError): 
+            if the data does not contain the field 
+            "basic_information".
+    
+            >>> release_string({'id': 1}) # doctest: +NORMALIZE_WHITESPACE
+            Traceback (most recent call last): 
+            ...
+            KeyError: "Your release 1 doesn't contain the field 'basic_information'"
+    
     Example:
         >>> with open('discogs_finder/tests/test.json', 'r') as f:
         ...    r = json.load(f)
         >>> release_string(r) # doctest: +NORMALIZE_WHITESPACE
         u'Keith Jarrett: Shades (3318191)'
-    
-    Raises:
-        If the data does not contain the field "basic_information", 
-        an `KeyError` will be raised.
-        
-        >>> release_string({'id': 1}) 
-        Traceback (most recent call last): 
-            ...
-        KeyError: "Your release 1 doesn't contain the field 'basic_information'"
     """
     release_id = d_release['id']
     basics = d_release.get('basic_information', None)
@@ -72,7 +75,6 @@ def release_string(d_release):
 
 def found_in_release(data, add=None, **querry):
     """ Searches recursively in all leafes of the tree
-     contained in `data` for the key value pair in `querry`
     
     Args:
         data (dict):    the data tree
@@ -98,8 +100,7 @@ def found_in_release(data, add=None, **querry):
     Example:
         >>> with open('discogs_finder/tests/test.json', 'r') as f:
         ...    r = json.load(f)
-        >>> found_in_release(r, name="Keith") 
-        ... # doctest: +NORMALIZE_WHITESPACE
+        >>> found_in_release(r, name="Keith") # doctest: +NORMALIZE_WHITESPACE
         (True, [u'basic_information', u'artists', u'0', u'name'], 
         u'Keith Jarrett')
     
