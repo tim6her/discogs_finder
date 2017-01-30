@@ -1,23 +1,22 @@
 #!/usr/bin/env python
 
-import click
 import re
 import json
 from string import Template
 
-from discogs_finder import *
+import click
+
+import discogs_finder as df
 
 def _help(ctx, param, value):
     with open('doc/discogs-finder.rst', 'r') as doc:
         h = doc.read()
     if not value or ctx.resilient_parsing:
-            return
+        return
     click.echo(h)
     ctx.exit()
 
-@click.command(context_settings=dict(
-    ignore_unknown_options=True,
-    ))
+@click.command(context_settings=dict(ignore_unknown_options=True,))
 @click.option('--help', is_flag=True, callback=_help,
               expose_value=False, is_eager=True)
 @click.option('--u', 'user', prompt='Your discogs user name',
@@ -25,7 +24,7 @@ def _help(ctx, param, value):
 @click.option('--v', 'verbose', flag_value=True,
               default=False,
               help='Verbose output dumping the whole json-file')
-@click.option('--p', 'verbose', flag_value=False, 
+@click.option('--p', 'verbose', flag_value=False,
               help='Pretty output')
 @click.argument('querry', nargs=-1, type=click.UNPROCESSED)
 def finder(user, querry, verbose=False):
@@ -36,14 +35,14 @@ def finder(user, querry, verbose=False):
         q = {match.group(1): match.group(2)}
     else:
         raise click.BadParameter('Could not match your querry to value=key')
-    
+
     click.echo('Searching for ' + str(q))
-    data = load_data(user)
-    
+    data = df.load_data(user)
+
     p_repl = re.compile(value, flags=re.IGNORECASE)
     result = []
     for r in data:
-        f, a, v = found_in_release(r, None, **q)
+        f, a, v = df.found_in_release(r, None, **q)
         if f:
             if verbose:
                 s = json.dumps(r, indent=2)
@@ -53,9 +52,9 @@ def finder(user, querry, verbose=False):
                 s = temp.safe_substitute(value=style)
             else:
                 v = p_repl.sub(r'%s', unicode(v), count=1)
-                rs = release_string(r)
+                rs = df.release_string(r)
                 s = '%d)\t%s\n\t%s = %s' % (len(result) + 1,
-                                        rs, '.'.join(a), v)
+                                            rs, '.'.join(a), v)
                 s = s % click.style(value, fg='green', bold=True)
             result.append(s)
     click.echo('\n'.join(result))

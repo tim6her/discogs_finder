@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+""" Load your *Discogs* collection, querry releases and format them to
+strings
+"""
 
 import json
 import urllib2
@@ -6,16 +9,16 @@ import urllib2
 
 def load_data(username):
     """ Gets user collection (in all folders)
-    
-    The collection is retrieved for the 
+
+    The collection is retrieved for the
     specified user from the Discogs API.
-    
+
     Args:
         username (string): user name
-    
+
     Returns:
         (dict): user collection
-    
+
     Example:
         >>> load_data('tim6her') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
         [{u'instance_id': 188396596, u'date_added': ...
@@ -28,23 +31,23 @@ def load_data(username):
 
 def release_string(d_release):
     """ Produces a string describing a release
-    
+
     Args:
         d_release (dict): dictonary containing the release data
-    
+
     Returns:
         (string): representing the release
-    
+
     Raises:
-        (KeyError): 
-            if the data does not contain the field 
+        (KeyError):
+            if the data does not contain the field
             "basic_information".
-    
+
             >>> release_string({'id': 1}) # doctest: +NORMALIZE_WHITESPACE
-            Traceback (most recent call last): 
+            Traceback (most recent call last):
             ...
             KeyError: "Your release 1 doesn't contain the field 'basic_information'"
-    
+
     Example:
         >>> with open('discogs_finder/tests/test.json', 'r') as f:
         ...    r = json.load(f)
@@ -54,8 +57,8 @@ def release_string(d_release):
     release_id = d_release['id']
     basics = d_release.get('basic_information', None)
     if not basics:
-        raise KeyError ("Your release %d doesn't contain"
-                " the field 'basic_information'" % release_id)
+        raise KeyError("Your release %d doesn't contain"
+                       " the field 'basic_information'" % release_id)
     artists = basics.get('artists', None)
     if len(artists):
         j = artists[0]['join']
@@ -66,25 +69,25 @@ def release_string(d_release):
         arts = j.join((a['name'] for a in artists))
     else:
         arts = None
-    
+
     title = basics.get('title', None)
-    
+
     return u'{arts}: {title} ({release_id})'.format(arts=arts,
-                                            title=title,
-                                            release_id=release_id)
+                                                    title=title,
+                                                    release_id=release_id)
 
 def found_in_release(data, add=None, **querry):
     """ Searches recursively in all leafes of the tree
-    
+
     Args:
         data (dict):    the data tree
         add (list):     address pre-fix, default `None`
         querry (dict):  the key value pair to look for
-    
+
     Returns:
-        (bool, list, string): 
+        (bool, list, string):
             *   `True` if pair was found else `False`
-            *   If the pair was found, its address is 
+            *   If the pair was found, its address is
                 returned, i.e., the sequence of nodes
                 leading to the pair.  List indices are
                 returned as `unicode(i)`.
@@ -92,36 +95,36 @@ def found_in_release(data, add=None, **querry):
                 is still a list returned but it
                 contains an *arbitrary* address.
             *   the matched value
-    
+
     Note:
         The value must only be *contained* in a leaf not
         equal the leafs value, i.e., "Kei" matches "Keith".
-    
+
     Example:
         >>> with open('discogs_finder/tests/test.json', 'r') as f:
         ...    r = json.load(f)
         >>> found_in_release(r, name="Keith") # doctest: +NORMALIZE_WHITESPACE
-        (True, [u'basic_information', u'artists', u'0', u'name'], 
+        (True, [u'basic_information', u'artists', u'0', u'name'],
         u'Keith Jarrett')
-    
+
     """
     add = [] if not add else add
-    if type(data) == list:
-        sub = (found_in_release(d, add + [unicode(i)], **querry) 
-                        for i, d in enumerate(data))
-        
-    elif type(data) == dict:
+    if isinstance(data, list):
+        sub = (found_in_release(d, add + [unicode(i)], **querry)
+               for i, d in enumerate(data))
+
+    elif isinstance(data, dict):
         field = querry.keys()[0]
         value = querry[field]
         if unicode(value).lower() in unicode(data.get(field, '')).lower():
             return True, add + [unicode(field)], data[field]
-        
+
         sub = (found_in_release(d, add + [k], **querry)
-                        for k, d in data.iteritems())
-        
+               for k, d in data.iteritems())
+
     else:
         return False, add, None
-    
+
     hits = [(f, a, v) for f, a, v in sub if f]
 
     if len(hits):
